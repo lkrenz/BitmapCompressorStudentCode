@@ -34,7 +34,49 @@ public class BitmapCompressor {
     public static void compress() {
 
         // TODO: complete compress()
+        String binaryData = BinaryStdIn.readString();
+        int max = 1;
+        int localMax = 1;
+        int length = 0;
+        boolean currentIsZero = (binaryData.charAt(0) == '0');
+        for (int i = 1; i < binaryData.length(); i++) {
+            if ((binaryData.charAt(i) == '0')  == currentIsZero) {
+                localMax++;
+            }
+            else {
+                if (localMax > max) {
+                    max = localMax;
+                }
+                localMax = 0;
+                currentIsZero = !currentIsZero;
+                length++;
+            }
+        }
+        int integerLength = findNumBits(max);
 
+        localMax = 0;
+        currentIsZero = (binaryData.charAt(0) == '0');
+        // Meta data
+        // Start bit
+        BinaryStdOut.write(currentIsZero);
+
+        // Length used to store integers
+        BinaryStdOut.write(integerLength);
+
+        // Number of integer sequences to read in
+        BinaryStdOut.write(length * integerLength);
+
+        // Write main data in
+        for (int i = 0; i < binaryData.length(); i++) {
+            if ((binaryData.charAt(i) == '0')  == currentIsZero) {
+                localMax++;
+            }
+            else {
+                BinaryStdOut.write(localMax, integerLength);
+                currentIsZero = !currentIsZero;
+                localMax = 0;
+            }
+        }
         BinaryStdOut.close();
     }
 
@@ -45,8 +87,28 @@ public class BitmapCompressor {
     public static void expand() {
 
         // TODO: complete expand()
+        boolean currentIsZero = BinaryStdIn.readBoolean();
+        int integerLength = BinaryStdIn.readInt();
+        int fileLength = BinaryStdIn.readInt();
 
+        for (int i = 0; i < fileLength; i++) {
+            int numCharacters = BinaryStdIn.readInt(integerLength);
+            for (int j = 0; j < numCharacters; j++) {
+                BinaryStdOut.write(currentIsZero);
+            }
+            currentIsZero = !currentIsZero;
+        }
         BinaryStdOut.close();
+    }
+
+    public static int findNumBits(int num) {
+        int count = 0;
+        while (num > 0) {
+            num /= 2;
+            count++;
+        }
+        count += 1;
+        return count;
     }
 
     /**
