@@ -16,6 +16,7 @@
  *  1240 bits
  ******************************************************************************/
 
+
 /**
  *  The {@code BitmapCompressor} class provides static methods for compressing
  *  and expanding a binary bitmap input.
@@ -34,7 +35,17 @@ public class BitmapCompressor {
     public static void compress() {
 
         // TODO: complete compress()
-        String binaryData = BinaryStdIn.readString();
+        String binaryData = "";
+        while (!BinaryStdIn.isEmpty()) {
+            boolean data = BinaryStdIn.readBoolean();
+            if (data) {
+                binaryData += "1";
+            }
+            else {
+                binaryData += "0";
+            }
+        }
+
         int max = 1;
         int localMax = 1;
         int length = 0;
@@ -64,7 +75,7 @@ public class BitmapCompressor {
         BinaryStdOut.write(integerLength);
 
         // Number of integer sequences to read in
-        BinaryStdOut.write(length * integerLength);
+        BinaryStdOut.write(length);
 
         // Write main data in
         for (int i = 0; i < binaryData.length(); i++) {
@@ -72,7 +83,7 @@ public class BitmapCompressor {
                 localMax++;
             }
             else {
-                BinaryStdOut.write(localMax, integerLength);
+                BinaryStdOut.write(localMax + 1, integerLength);
                 currentIsZero = !currentIsZero;
                 localMax = 0;
             }
@@ -90,6 +101,7 @@ public class BitmapCompressor {
         boolean currentIsZero = BinaryStdIn.readBoolean();
         int integerLength = BinaryStdIn.readInt();
         int fileLength = BinaryStdIn.readInt();
+        System.out.println(integerLength);
 
         for (int i = 0; i < fileLength; i++) {
             int numCharacters = BinaryStdIn.readInt(integerLength);
