@@ -58,12 +58,12 @@ public class BitmapCompressor {
                 if (localMax > max) {
                     max = localMax;
                 }
-                localMax = 0;
+                localMax = 1;
                 currentIsZero = !currentIsZero;
                 length++;
             }
         }
-        int integerLength = findNumBits(max);
+        int integerLength = findNumBits(max) + 1;
 
         localMax = 0;
         currentIsZero = (binaryData.charAt(0) == '0');
@@ -72,10 +72,10 @@ public class BitmapCompressor {
         BinaryStdOut.write(currentIsZero);
 
         // Length used to store integers
-        BinaryStdOut.write(integerLength);
+        BinaryStdOut.write(integerLength, 32);
 
         // Number of integer sequences to read in
-        BinaryStdOut.write(length);
+        BinaryStdOut.write(length, 32);
 
         // Write main data in
         for (int i = 0; i < binaryData.length(); i++) {
@@ -88,6 +88,7 @@ public class BitmapCompressor {
                 localMax = 0;
             }
         }
+        BinaryStdOut.write(localMax + 1, integerLength);
         BinaryStdOut.close();
     }
 
@@ -98,10 +99,10 @@ public class BitmapCompressor {
     public static void expand() {
 
         // TODO: complete expand()
-        boolean currentIsZero = BinaryStdIn.readBoolean();
-        int integerLength = BinaryStdIn.readInt();
-        int fileLength = BinaryStdIn.readInt();
-        System.out.println(integerLength);
+        boolean currentIsZero = !BinaryStdIn.readBoolean();
+        int integerLength = BinaryStdIn.readInt(32);
+        int fileLength = BinaryStdIn.readInt(32);
+
 
         for (int i = 0; i < fileLength; i++) {
             int numCharacters = BinaryStdIn.readInt(integerLength);
