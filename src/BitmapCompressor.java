@@ -33,7 +33,7 @@ public class BitmapCompressor {
      * and writes the results to standard output.
      */
     public static void compress() {
-
+//
         // TODO: complete compress()
         String binaryData = "";
         while (!BinaryStdIn.isEmpty()) {
@@ -46,11 +46,11 @@ public class BitmapCompressor {
             }
         }
 
-        int max = 1;
-        int localMax = 1;
+        int max = 0;
+        int localMax = 0;
         int length = 0;
-        boolean currentIsZero = (binaryData.charAt(0) == '0');
-        for (int i = 1; i < binaryData.length(); i++) {
+        boolean currentIsZero = !(binaryData.charAt(0) == '0');
+        for (int i = 0; i < binaryData.length(); i++) {
             if ((binaryData.charAt(i) == '0')  == currentIsZero) {
                 localMax++;
             }
@@ -78,14 +78,14 @@ public class BitmapCompressor {
         BinaryStdOut.write(length, 32);
 
         // Write main data in
-        for (int i = 0; i < binaryData.length(); i++) {
+        for (int i = 0; i < binaryData.length() - 1; i++) {
             if ((binaryData.charAt(i) == '0')  == currentIsZero) {
                 localMax++;
             }
             else {
-                BinaryStdOut.write(localMax + 1, integerLength);
+                BinaryStdOut.write(localMax, integerLength);
                 currentIsZero = !currentIsZero;
-                localMax = 0;
+                localMax = 1;
             }
         }
         BinaryStdOut.write(localMax + 1, integerLength);
@@ -100,9 +100,8 @@ public class BitmapCompressor {
 
         // TODO: complete expand()
         boolean currentIsZero = !BinaryStdIn.readBoolean();
-        int integerLength = BinaryStdIn.readInt(32);
-        int fileLength = BinaryStdIn.readInt(32);
-
+        int integerLength = BinaryStdIn.readInt();
+        int fileLength = BinaryStdIn.readInt();
 
         for (int i = 0; i < fileLength; i++) {
             int numCharacters = BinaryStdIn.readInt(integerLength);
