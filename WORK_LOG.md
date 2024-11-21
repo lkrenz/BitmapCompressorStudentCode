@@ -8,6 +8,7 @@ Name: YOUR NAME HERE
 | November 19 |     11:15-11:45     |                                                                                   I spent this time debugging my code. I found one issue in which I wasn't adding the final bit to the length of each run, which got me a largely correct algorithm. However, the code still end with the q offsett in the final file. |
 | November 19 |     11:45-12:05     |                                                                                                            I couldn't figure out the problem, but I solved an issue with part of the header file being included in the final file. I think the issue has something to do with the length of each series being one off. |
 | November 19 |     7:00 - 7:45     | I finally fixed the errors in my code. There were two main errors that were leading to the offset and to extra bits being added at the end. I solved the first error by setting localMax to 0 initially and then setting it to one after each cycle. I solved the other issue by skipping the final character in data. |
+| November 20 |      8:45-8:55      |                                                                                               Added comments to the code. I also realized I was adding one to the number of bits needed to represent an integer for no reason which makes my code slightly more efficient, with a compression ratio of just under 20%. |
 
 
 
