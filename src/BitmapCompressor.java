@@ -121,6 +121,8 @@ public class BitmapCompressor {
         // Finds the starting bit
         boolean currentBit = data[0];
 
+
+        int sequenceLength = 0;
         // Finds the length of the longest sequence of 0s or 1s
         for (int i = 0; i < data.length; i++) {
             // If the bit is the current bit, the sequence is continued
@@ -139,7 +141,7 @@ public class BitmapCompressor {
         }
 
         int integerLength = findNumBits(length);
-        integerLength = findOptimal(data, integerLength);
+//        integerLength = findOptimal(data, integerLength);
 
         // Meta data
         // Start bit
@@ -149,7 +151,7 @@ public class BitmapCompressor {
         BinaryStdOut.write(integerLength);
 
         // Number of integer sequences to read in
-        BinaryStdOut.write(length);
+        BinaryStdOut.write(length + 1);
 
 
         int maxVal = 2;
@@ -158,9 +160,9 @@ public class BitmapCompressor {
         }
 
         currentBit = data[0];
+        localMax=0;
         // Write main data in by adding lengths of sequences
         for (int i = 0; i < data.length - 1; i++) {
-
             if (data[i] != currentBit) {
                 BinaryStdOut.write(localMax, integerLength);
                 currentBit = !currentBit;
@@ -188,19 +190,34 @@ public class BitmapCompressor {
     public static void expand() {
 
         // Reads in metadata from the file
-        boolean currentIsZero = !BinaryStdIn.readBoolean();
+        boolean currentIsZero = BinaryStdIn.readBoolean();
         int integerLength = BinaryStdIn.readInt();
         int fileLength = BinaryStdIn.readInt();
 
-        // Iterates through the sequences, using the number of bits per integer to get the length
-        for (int i = 0; i < fileLength; i++) {
-            int numCharacters = BinaryStdIn.readInt(integerLength);
+//        // Iterates through the sequences, using the number of bits per integer to get the length
+//        for (int i = 0; i < fileLength; i++) {
+//            int numCharacters = BinaryStdIn.readInt(integerLength);
+//
+//            // Adds the number of bits represented by the integer length
+//            for (int j = 0; j < numCharacters; j++) {
+//                BinaryStdOut.write(currentIsZero);
+//            }
+//            currentIsZero = !currentIsZero;
+//        }
+//        BinaryStdOut.close();
 
-            // Adds the number of bits represented by the integer length
-            for (int j = 0; j < numCharacters; j++) {
-                BinaryStdOut.write(currentIsZero);
+        while (true) {
+            try {
+                int numCharacters = BinaryStdIn.readInt(integerLength);
+
+                // Adds the number of bits represented by the integer length
+                for (int j = 0; j < numCharacters; j++) {
+                    BinaryStdOut.write(currentIsZero);
+                }
+                currentIsZero = !currentIsZero;
+            } catch (Exception e) {
+                break;
             }
-            currentIsZero = !currentIsZero;
         }
         BinaryStdOut.close();
     }
