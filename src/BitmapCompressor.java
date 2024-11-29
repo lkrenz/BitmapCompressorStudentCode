@@ -141,7 +141,7 @@ public class BitmapCompressor {
         }
 
         int integerLength = findNumBits(length);
-//        integerLength = findOptimal(data, integerLength);
+//        integerLength = findOptimal(data, integerLength) -1;
 
         // Meta data
         // Start bit
@@ -255,7 +255,6 @@ public class BitmapCompressor {
         arr.add(data[0]);
 
         // Length used to store integers
-        BinaryStdOut.write(integerLength, 32);
         for (int i = 0; i < 64; i++) {
             arr.add(false);
         }
@@ -296,6 +295,10 @@ public class BitmapCompressor {
 
         int currentLength = initial - 1;
         int newLength = findCompressLength(data, currentLength);
+        if (initialLength < newLength) {
+            return initial;
+        }
+
         while(newLength < currentLength) {
             newLength = findCompressLength(data, currentLength);
         }
